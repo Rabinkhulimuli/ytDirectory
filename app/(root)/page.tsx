@@ -1,16 +1,20 @@
 import SearchForm from "../../components/searchform";
 import StartupCard from "@/components/startupcard";
-import { client } from "@/sanity/lib/client";
+
 import { Startup_queries } from "@/sanity/lib/queries";
 import { StartupTypeCard } from "@/components/startupcard";
+import { sanityFetch,SanityLive } from "@/sanity/lib/live";
+
 export default async function Home({
   searchParams,
 }: {
   searchParams: Promise<{ query?: string }>;
 }) {
   const query = (await searchParams).query;
-  const posts = await client.fetch(Startup_queries)
- 
+  const params= {search:query || null}
+ /*  const posts = await client.fetch(Startup_queries) */
+  const {data:posts}=await sanityFetch({query:Startup_queries,params}) //revalidate page when new changes are made 
+  
   return (
     <>
       <section className=" pink_container">
@@ -30,10 +34,11 @@ export default async function Home({
           {posts?.length > 0 ? (
             posts.map((post: StartupTypeCard, index: number) => <StartupCard  key={post?._id} post={post}/>)
           ) : (
-            <p className="no-results">No startup found</p>
+            <p className="no-results" >No startup found</p>
           )}
         </ul>
       </section>
+      <SanityLive/>
     </>
   );
 }
