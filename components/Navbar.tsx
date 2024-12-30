@@ -14,14 +14,14 @@ export default async function Navbar() {
         {session && session?.user ? (
           <>
             <Link href="/startup/create">
-              <span className="max-sm:hidden" >Create</span>
+              <span className="" >Create</span>
             </Link>
             <form action={async()=> {
                 'use server'
                 await signOut()
             }}> 
             <button type="submit" >
-            <span className="max-sm:hidden">Logout</span>
+            <span className="">Logout</span>
             </button>
             </form>
             <Link href={`/user/${session?.id}`}>
