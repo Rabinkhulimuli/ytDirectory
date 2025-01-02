@@ -11,7 +11,7 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { createPitch } from "@/lib/actions";
-import { auth } from "@/auth";
+import { FormState } from "sanity";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -19,7 +19,7 @@ const StartupForm = () => {
   const { toast } = useToast();
   const router = useRouter();
     
-  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+  const handleFormSubmit = async (prevState: FormState, formData: FormData) => {
     try {
        /*  const testAuth=async()=> {
             "use server"
@@ -87,7 +87,9 @@ const StartupForm = () => {
     error: "",
     status: "INITIAL",
   });
-
+  if (state){
+    console.log("state")
+  }
   return (
     <form action={formAction} className="startup-form">
       <div>

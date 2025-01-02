@@ -3,8 +3,9 @@ import slugify from 'slugify'
 import { auth } from "@/auth"
 import { parseServerActionResponse } from "./utils"
 import { writeClient } from '@/sanity/lib/write-client'
+import { FormState } from 'sanity'
 export const createPitch=async (
-    state:any,
+    state:FormState,
     form:FormData,
     pitch:string
 )=> {
