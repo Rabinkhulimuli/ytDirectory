@@ -24,6 +24,17 @@ export const startup_views_query=defineQuery(`*[_type=="startup" && _id==$id][0]
  views
 }`)
 export const Author_by_github_id_query=defineQuery(`
+  *[_type=="author" && id==$id][0]{
+  _id,
+  id,
+  name,
+  username,
+  email,
+  image,
+  bio
+  }
+  `)
+export const Author_by_id_query=defineQuery(`
   *[_type=="author" && _id==$id][0]{
   _id,
   id,

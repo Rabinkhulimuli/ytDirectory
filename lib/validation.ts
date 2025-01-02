@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const formSchema = z.object({
-  title: z.string().min(5).max(100),
+  title: z.string().min(3).max(100),
   description: z.string().min(20).max(500),
   category: z.string().min(3).max(20),
   link: z
@@ -9,15 +9,18 @@ export const formSchema = z.object({
     .url()
     .refine(async (url) => {
       try {
-        const res = await fetch(url, { method: "HEAD",mode:"no-cors" });
+        // Try fetching without 'no-cors' to ensure you can access the content type
+        const res = await fetch(url, { method: "HEAD" });
         const contentType = res.headers.get("content-type");
-        console.log(contentType)
-        return contentType?.startsWith("image/"); // Validates if it's an image
-      } catch {
-        return false; // Fails validation if fetch fails
+
+        return contentType?.startsWith("image/");
+      } catch (error) {
+        // Log the error for debugging purposes
+        console.error("Error fetching URL:", error);
+        return false;
       }
     }, {
-      message: "The link must point to a valid image file (jpg, jpeg, png)."
+      message: "The provided link is not a valid image URL",
     }),
-  pitch: z.string().min(5),
+  pitch: z.string().min(10),
 });

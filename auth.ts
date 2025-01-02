@@ -1,3 +1,4 @@
+
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import { client } from "./sanity/lib/client"
@@ -6,21 +7,23 @@ import { writeClient } from "./sanity/lib/write-client"
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub],
   callbacks: {
-    async signIn({ user, profile }) {
+    async signIn({profile}) {
       try {
+        const {id,avatar_url:image,name,email,bio,login}=  profile
+       
         const existingUser = await client.withConfig({useCdn:false}).fetch(Author_by_github_id_query, {
-          id: profile?.id,
+          id,
         });
 
         if (!existingUser) {
           await writeClient.create({
             _type: "author",
-            id: profile?.id,
-            name: user?.name || "",
-            username: profile?.login || "",
-            email: user?.email || "",
-            image: user?.image || "",
-            bio: profile?.bio || "",
+            id: id,
+            name: name || "",
+            username: login || "",
+            email: email || "",
+            image: image || "",
+            bio:bio || "",
           });
         }
         return true;
