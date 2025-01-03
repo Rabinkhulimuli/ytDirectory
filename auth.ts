@@ -9,8 +9,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async signIn({user,profile}) {
       try {
-        const {avatar_url:image,name,email,bio,login}=  profile
-       const {id}= user
+        const {id,avatar_url:image,name,email,bio,login}=  profile
+       
         const existingUser = await client.withConfig({useCdn:false}).fetch(Author_by_github_id_query, {
           id,
         });
@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: name || "",
             username: login || "",
             email: email || "",
-            image: image || "",
+            image: image || user.image || '',
             bio:bio || "",
           });
         }
