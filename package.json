@@ -15,7 +15,7 @@
   "overrides": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "^15.1.1-canary.23"
+    "next": "^15.1.1-canary.24"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.2",
