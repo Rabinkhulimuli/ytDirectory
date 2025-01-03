@@ -7,10 +7,10 @@ import { writeClient } from "./sanity/lib/write-client"
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub],
   callbacks: {
-    async signIn({profile}) {
+    async signIn({user,profile}) {
       try {
-        const {id,avatar_url:image,name,email,bio,login}=  profile
-       
+        const {avatar_url:image,name,email,bio,login}=  profile
+       const {id}= user
         const existingUser = await client.withConfig({useCdn:false}).fetch(Author_by_github_id_query, {
           id,
         });
