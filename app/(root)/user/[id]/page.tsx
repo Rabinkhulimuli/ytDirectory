@@ -20,7 +20,7 @@ export default async function Page({params}:{params:Promise<{id:string}>}){
         <div className="profile_card ">
             <div className=" profile_title">
                 <h3 className="text-24-black uppercase text-center ">
-                {session?.user?.name}
+                {user?.name}
                 </h3>
                
             </div>
