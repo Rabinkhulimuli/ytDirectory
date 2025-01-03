@@ -1,6 +1,6 @@
 import { formatDate } from "@/lib/utils"
 import { client } from "@/sanity/lib/client"
-import { Startup_by_id_querys } from "@/sanity/lib/queries"
+import { Playlist_by_slug_query, Startup_by_id_querys } from "@/sanity/lib/queries"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import Image from "next/image"
@@ -8,6 +8,8 @@ import markdownit from "markdown-it"
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import View from "@/components/view"
+import StartupCard, { StartupTypeCard } from "@/components/startupcard"
+
 const md=markdownit()
 export const experimental_ppr=true
 export default async function Page({params}:{params:Promise<{id:string}>}){
@@ -15,7 +17,10 @@ export default async function Page({params}:{params:Promise<{id:string}>}){
     if (!id){
         return <div>Page not found</div>
     }
-    const post=await client.fetch(Startup_by_id_querys,{id})//PPR
+    const[post,{select:editorPosts}]= await Promise.all([
+        client.fetch(Startup_by_id_querys,{id}),//PPR
+        client.fetch(Playlist_by_slug_query,{slug:'editor-picks'})
+    ])
   
     if (!post){
         return notFound()
@@ -34,9 +39,7 @@ export default async function Page({params}:{params:Promise<{id:string}>}){
             </p>
         </section>
         <section className="section_container">
-            <img src={post.image} alt="thumbnail" 
-            className="w-full h-auto rounded-xl"
-            />
+            <Image src={post.image} width={100} height={100}  className="w-full h-auto rounded-xl" alt="thumbnail"  />
         </section>
         <section className="section_container">
             <div className="space-y-5 mt-10 max-w-4xl mx-auto">
@@ -79,7 +82,20 @@ export default async function Page({params}:{params:Promise<{id:string}>}){
             </div>
             <hr className="divider" />
             {/* todo: editor selected startup */}
-
+                {
+                    editorPosts.length >0 && (
+                        <div className="max-w-4xl mx-auto" >
+                            <p className="text-30-semibold">
+                                Editor Picks
+                            </p>
+                            <ul className="mt-7 card_grid-sm" >
+                                {editorPosts.map((post:StartupTypeCard,index:number)=> (
+                                    <StartupCard key={index} post={post}  />
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                }
             {/* make dynamic for ppr */}
             <Suspense fallback={<Skeleton/> } >
                     <View id={id} />
