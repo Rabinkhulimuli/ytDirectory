@@ -7,7 +7,7 @@ export default async function UserStartup({id}:{id:string}){
     return (<>
         {
             startups.length > 0? startups.map((startup:StartupTypeCard)=> {
-                return <StartupCard key={startup._id} post={startup} />
+                return <StartupCard  key={startup._id} post={startup} />
             }): <div className="no-result">No Post Yet </div>
         }
     </>)
